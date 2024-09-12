@@ -8,5 +8,8 @@
 </template>
 
 <script setup>
-// 必要に応じて、追加の設定やインポートを行います
+// ミドルウェアを適用
+definePageMeta({
+    middleware: 'auth'
+});
 </script>
