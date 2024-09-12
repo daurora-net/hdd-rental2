@@ -1,19 +1,10 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 export default defineNuxtRouteMiddleware((to, from) => {
     const auth = getAuth();
+    const user = auth.currentUser;
 
-    return new Promise((resolve) => {
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                // ユーザーがログインしていない場合はログインページへリダイレクト
-                return resolve(navigateTo('/login'));
-            }
-            if (user && !user.emailVerified) {
-                // ユーザーがメール認証をしていない場合は verify-email ページへリダイレクト
-                return resolve(navigateTo('/verify-email'));
-            }
-            resolve();
-        });
-    });
+    if (user && !user.emailVerified) {
+        return navigateTo('/verify-email'); // 認証が完了していない場合はリダイレクト
+    }
 });
