@@ -14,6 +14,7 @@
         </form>
         <p v-if="error">{{ error }}</p>
         <p v-if="message">{{ message }}</p>
+        <nuxt-link to="/register">Go to Register</nuxt-link> <!-- レジスターページへのリンク -->
     </div>
 </template>
 
@@ -36,6 +37,7 @@ const loginUser = async () => {
 
         if (user && user.emailVerified) {
             message.value = "ユーザーはメール認証済みです。";
+            navigateTo('/'); // 認証完了後にホームページへ
         } else {
             message.value = "メール認証がまだ完了していません。";
         }
