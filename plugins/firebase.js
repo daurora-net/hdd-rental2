@@ -6,7 +6,8 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDvl00BtcPGR3PVXIJC21cQuI4pnyzW6L4",
-    authDomain: "hdd-rental2.firebaseapp.com",
+    // authDomain: "hdd-rental2.firebaseapp.com",
+    authDomain: "hdd-rental2.web.app",
     projectId: "hdd-rental2",
     storageBucket: "hdd-rental2.appspot.com",
     messagingSenderId: "493843761254",

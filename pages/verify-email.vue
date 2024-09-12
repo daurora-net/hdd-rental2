@@ -9,19 +9,35 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { getAuth, applyActionCode } from "firebase/auth";
 
+const seconds = ref(5);
 const router = useRouter();
-const seconds = ref(5); // 5秒後にリダイレクト
+const auth = getAuth();
 
-// ページが読み込まれたときにカウントダウンを開始し、リダイレクトする
-onMounted(() => {
-    const countdown = setInterval(() => {
-        if (seconds.value > 0) {
-            seconds.value--;
+onMounted(async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const oobCode = urlParams.get('oobCode'); // メールリンクの oobCode を取得
+    const mode = urlParams.get('mode'); // verifyEmail モードを確認
+
+    try {
+        if (mode === 'verifyEmail' && oobCode) {
+            // メール確認のコードを適用
+            await applyActionCode(auth, oobCode);
+            const countdown = setInterval(() => {
+                if (seconds.value > 0) {
+                    seconds.value--;
+                } else {
+                    clearInterval(countdown);
+                    router.push('/'); // トップページにリダイレクト
+                }
+            }, 1000);
         } else {
-            clearInterval(countdown);
-            router.push('/'); // indexページにリダイレクト
+            throw new Error("Invalid action code or mode");
         }
-    }, 1000); // 1秒ごとにカウントダウン
+    } catch (error) {
+        console.error("Error verifying email:", error);
+        router.push('/'); // 認証失敗時にリダイレクト
+    }
 });
 </script>
